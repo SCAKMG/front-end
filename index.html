@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="app">
+
+    <div id="float_bar" >
+    <!-- <div id="float_bar" class="draggable"> -->
+      <div class="tittle">
+        <div :class="{active:state===1}">添加</div>
+        <div :class="{active:state===0}">修改</div>
+      </div>
+      <input id="name" type="text" name="name" value="" v-model.trim="name" placeholder="姓名">
+      <span  v-show="name==''">请输入姓名</span>
+      <input id="age" type="text" name="age" value="" v-model.trim="age" placeholder="年龄">
+      <span v-show="age==''">请输入年龄</span>
+      <input id="phone" type="phone" name="phone" value="" v-model.trim="phone" placeholder="电话号码">
+      <span v-show="phone==''">请输入电话号码</span>
+      <button v-show="state===1" :class="{avail:available}" v-on:click="data_upload()">提交</button>
+      <button v-show="state===0" :class="{avail:available}" v-on:click="submit_patch ()">修改</button>
+    </div>
+
+    <div class="main">
+
+      <div class="example" v-for="(item,index) in list" :key="item.ID">
+        <div class="head_pic"></div>
+        <div class="content">
+          <div id="h_name">{{item.name}}</div>
+          <div class="rest_of">年龄：{{item.age}}</div>
+          <div class="rest_of">电话号码：{{item.phone}}</div>
+        </div>
+        <button class="delete" data="delete.svg" v-on:click="data_deletes(item.ID)"></button>
+        <button class="patch" data="patch.svg" v-on:click="data_patch(item.ID)"></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        name: '',
+        age: '',
+        phone: '',
+        state: 1,
+        temp: '',
+        list: []
+      },
+      computed: {
+        available() {
+          return this.name !== '' && this.age !== '' && this.phone !== '';
+        }
+      },
+      created() {
+        this.fetch_data()
+      },
+      methods: {
+        async fetch_data() {
+          try {
+            const res = await axios.get('http://127.0.0.1:3000/get');
+            console.log(res);
+            this.list = res.data
+          } catch (error) {
+            console.error(error);
+          }
+        },
+
+        async data_upload() {
+          if (this.available) {
+            try {
+              const res = await axios.post('http://127.0.0.1:3000/post', {
+                ID: '',
+                name: this.name,
+                age: this.age,
+                phone: this.phone
+              })
+            } catch (error) {
+              console.error(error);
+            }
+
+
+            this.name = ''
+            this.age = ''
+            this.phone = ''
+            this.fetch_data()
+
+          }
+        },
+
+        data_deletes(ID) {
+          axios({
+            url: 'http://127.0.0.1:3000/delete',
+            method: 'delete',
+            data: {
+              ID
+            }
+          }).then(result => {
+            console.log(result)
+            this.fetch_data()
+          }).catch(error => {
+            console.log(error)
+          })
+
+        },
+
+        data_patch(ID) {
+          if (this.state === 1) {
+            this.state = 0
+          }
+          axios({
+            url: 'http://127.0.0.1:3000/find',
+            method: 'get',
+            params: { ID }
+          }).then(result => {
+            console.log(result.data[0])
+            this.name = result.data[0].name
+            this.age = result.data[0].age
+            this.phone = result.data[0].phone
+            this.temp = result.data[0].ID
+          }).catch(error => {
+            console.log(error.message)
+          })
+
+          // this.fetch_data()
+        },
+        async submit_patch() {
+          let obj = {
+            ID: this.temp,
+            name: this.name,
+            age: this.age,
+            phone: this.phone
+          }
+          if (this.available) {
+            try {
+              await axios({
+                url: 'http://127.0.0.1:3000/patch',
+                method: 'post',
+                data: obj
+              });
+              console.log('Data updated successfully');
+              this.fetch_data();
+            } catch (error) {
+              console.error('Error updating data:', error);
+            }
+          }
+          this.temp = '';
+          this.name = '';
+          this.age = '';
+          this.phone = '';
+          this.state = 1;
+        }
+      },
+    })
+
+    // document.addEventListener('DOMContentLoaded', () => {
+    //   const floatBar = document.getElementById('float_bar');
+    //   let isDragging = false;
+    //   let offsetX, offsetY;
+    //   const viewportWidth = window.innerWidth;
+    //   const viewportHeight = window.innerHeight;
+    //   const floatBarWidth = floatBar.offsetWidth;
+    //   const floatBarHeight = floatBar.offsetHeight;
+
+    //   floatBar.addEventListener('mousedown', (e) => {
+    //     isDragging = true;
+    //     offsetX = e.clientX - floatBar.offsetLeft;
+    //     offsetY = e.clientY - floatBar.offsetTop;
+    //     floatBar.style.cursor = 'grabbing';
+    //   });
+
+    //   document.addEventListener('mousemove', (e) => {
+    //     if (isDragging) {
+    //       let left = e.clientX - offsetX;
+    //       let top = e.clientY - offsetY;
+
+    //       // 限制在左侧边界内  
+    //       if (left < 0) {
+    //         left = 0;
+    //       }
+    //       // 限制在右侧边界内  
+    //       if (left + floatBarWidth > viewportWidth) {
+    //         left = viewportWidth - floatBarWidth;
+    //       }
+    //       // 限制在上侧边界内  
+    //       if (top < 0) {
+    //         top = 0;
+    //       }
+    //       // 限制在下侧边界内  
+    //       if (top + floatBarHeight > viewportHeight) {
+    //         top = viewportHeight - floatBarHeight;
+    //       }
+
+    //       floatBar.style.left = `${left}px`;
+    //       floatBar.style.top = `${top}px`;
+    //     }
+    //   });
+
+    //   document.addEventListener('mouseup', () => {
+    //     isDragging = false;
+    //     floatBar.style.cursor = 'move';
+    //   });
+    // });
+
+  </script>
+
+</body>
+
+</html>

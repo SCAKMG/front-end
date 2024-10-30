@@ -1,0 +1,170 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: #eeeeef;
+}
+
+#app {
+  background-color: #eeeeef;
+}
+
+#float_bar {
+  z-index: 10;
+  position: absolute;
+  width: 500px;
+  height: 800px;
+  left: 60px;
+  margin-top: 100px;
+  margin-left: -30px;
+  width: 450px;
+  height: 567px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+}
+
+.tittle {
+  background-color: #ffffff;
+}
+
+.tittle div {
+  display: inline-block;
+  margin: 45px 0 20px 90px;
+  font-size: 35px;
+  color: #bbbbbb;
+  background-color: #ffffff;
+}
+
+.active {
+  color: black !important;
+  border-bottom: 4px solid #ff5c00;
+  padding-bottom: 4px;
+
+}
+
+input {
+  width: 336px;
+  height: 60px;
+  margin: 15px 0 0 47px;
+  background-color: #f9f9f9;
+  border: none;
+  font-size: 17px;
+  padding-left: 20px;
+}
+
+span {
+  color: #f04645;
+  font-size: 13px;
+  margin: 5px 0 0 47px;
+
+}
+
+.b{
+  background-color: #ffffff;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+#float_bar button {
+  width: 336px;
+  height: 60px;
+  background-color: #ffbe99;
+  margin: 30px 0 0 47px;
+  border: none;
+  font-size: 20px;
+  color: #ffffff;
+}
+
+#float_bar button:hover {
+  cursor: not-allowed;
+}
+
+.avail {
+  background-color: #ff6900 !important;
+}
+
+.avail:hover {
+  cursor: pointer !important;
+}
+
+.infor_block {
+  z-index: 1;
+  position: absolute;
+
+
+  margin-top: 90px;
+  background-color: #ffffff;
+}
+
+.main {
+  position: relative;
+  width: 1290px;
+  margin: 0 auto;
+  margin-top: 200px;
+  padding-left: 30px;
+}
+
+.example {
+  position: relative;
+  float: left;
+  margin-right: 30px;
+  margin-bottom: 20px;
+  width: 400px;
+  height: 220px;
+  background-color: #ffffff;
+}
+
+.content {
+  float: left;
+  background-color: #ffffff;
+  margin: 50px 0 0 40px;
+}
+
+.head_pic {
+  float: left;
+  width: 90px;
+  height: 120px;
+  margin: 50px 0 0 40px;
+  background: url(gua.jpg);
+  background-size: 120px;
+  background-position: -20px;
+}
+
+#h_name {
+  font-size: 25px;
+  margin-bottom: 20px;
+  background-color: #ffffff;
+}
+
+.rest_of {
+  margin-bottom: 10px;
+  background-color: #ffffff;
+
+}
+
+.delete {
+  float: right;
+  margin: 5px 5px 0 0;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background-color: #ffffff;
+  /* border-radius: 50%; */
+  background-image: url(delete.svg);
+  background-size: 20px;
+}
+
+.patch {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: 0 5px 5px 0;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background-color: #ffffff;
+  background-image: url(patch.svg);
+  background-size: 20px;
+}
